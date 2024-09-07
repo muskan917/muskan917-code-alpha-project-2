@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Posts</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <h1>Posts</h1>
+    <div id="post-list">
+        {% for post in posts %}
+        <div class="post">
+            <p><strong>{{ post.user.username }}</strong>: {{ post.content }}</p>
+            <p>Likes: {{ post.likes.count }}</p>
+            <form method="POST" action="{% url 'like-post' post.id %}">
+                {% csrf_token %}
+                <button type="submit">
+                    {% if user in post.likes.all %}
+                        Unlike
+                    {% else %}
+                        Like
+                    {% endif %}
+                </button>
+            </form>
+            <h4>Comments</h4>
+            {% for comment in post.comment_set.all %}
+                <p><strong>{{ comment.user.username }}</strong>: {{ comment.comment }}</p>
+            {% endfor %}
+            <form method="POST" action="{% url 'add-comment' post.id %}">
+                {% csrf_token %}
+                <input type="text" name="comment" placeholder="Add a comment">
+                <button type="submit">Comment</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
