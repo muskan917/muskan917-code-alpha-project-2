@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ profile.user.username }}'s Profile</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <h1>{{ profile.user.username }}'s Profile</h1>
+    <p>{{ profile.bio }}</p>
+    <p>Followers: {{ profile.followers.count }}</p>
+    <form method="POST" action="{% url 'follow-user' profile.user.username %}">
+        {% csrf_token %}
+        <button type="submit">
+            {% if user in profile.followers.all %}
+                Unfollow
+            {% else %}
+                Follow
+            {% endif %}
+        </button>
+    </form>
+    <a href="{% url 'post-list' %}">Back to Posts</a>
+</body>
+</html>
